@@ -12,6 +12,8 @@ services:
     ports:
       - '15672:15672'
       - '5672:5672'
+    networks:
+      - payment-network
 
   payment-db:
     container_name: payment-db
@@ -25,18 +27,20 @@ services:
     networks:
       - payment-network
 
-#  transaction-service:
-#    container_name: transaction-app
-#    build: ./transaction
-#    environment:
-#      PAYMENT_DB_HOST: payment-db
-#      PAYMENT_DB_NAME: payment-db
-#      PAYMENT_DB_USER: payment-default-user
-#      PAYMENT_DB_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
-#      PAYMENT_DB_PORT: 5432
-#    ports:
-#      - '8000:8000'
-#    depends_on:
-#      - payment-db
-#    networks:
-#      - payment-network
+  transaction-service:
+    container_name: transaction-app
+    build: ./transaction
+    environment:
+      PAYMENT_QUEUE: payment-queue
+      PAYMENT_DB_HOST: payment-db
+      PAYMENT_DB_NAME: payment-db
+      PAYMENT_DB_USER: payment-default-user
+      PAYMENT_DB_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
+      PAYMENT_DB_PORT: 5432
+    ports:
+      - '8000:8000'
+    depends_on:
+      - payment-db
+      - payment-queue
+    networks:
+      - payment-network
