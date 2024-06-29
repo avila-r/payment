@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: transaction
+
+  rabbitmq:
+    addresses: ${amqpUrl:guest:guest@localhost}
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+  datasource:
+    url: jdbc:postgresql://${PAYMENT_DB_HOST:localhost}:${PAYMENT_DB_PORT:5432}/${PAYMENT_DB_NAME:payment-db}
+    driver-class-name: org.postgresql.Driver
+    username: ${PAYMENT_DB_USER:payment-default-user}
+    password: ${PAYMENT_DB_PASSWORD:85a60bc4-4dec-4a34-b057-9d4dfb1b12cf}
+
+server:
+  port: 8000
+
+springdoc:
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /docs/specs
+
+queue:
+  notification:
+    name: payment-notification-queue
+
