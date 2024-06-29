@@ -1,0 +1,42 @@
+version: '3.8'
+
+networks:
+  payment-network:
+    driver: bridge
+
+services:
+
+  payment-queue:
+    container_name: payment-queue
+    image: rabbitmq:management
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+
+  payment-db:
+    container_name: payment-db
+    image: postgres:16.1
+    environment:
+      POSTGRES_DB: payment-db
+      POSTGRES_USER: payment-default-user
+      POSTGRES_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
+    ports:
+      - '5432:5432'
+    networks:
+      - payment-network
+
+#  transaction-service:
+#    container_name: transaction-app
+#    build: ./transaction
+#    environment:
+#      PAYMENT_DB_HOST: payment-db
+#      PAYMENT_DB_NAME: payment-db
+#      PAYMENT_DB_USER: payment-default-user
+#      PAYMENT_DB_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
+#      PAYMENT_DB_PORT: 5432
+#    ports:
+#      - '8000:8000'
+#    depends_on:
+#      - payment-db
+#    networks:
+#      - payment-network
