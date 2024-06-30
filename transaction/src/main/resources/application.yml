@@ -3,7 +3,7 @@ spring:
     name: transaction
 
   rabbitmq:
-    addresses: ${amqpUrl:guest:guest@localhost}
+    addresses: guest:guest@${PAYMENT_QUEUE:localhost}
 
   jpa:
     hibernate:
@@ -12,8 +12,8 @@ spring:
   datasource:
     url: jdbc:postgresql://${PAYMENT_DB_HOST:localhost}:${PAYMENT_DB_PORT:5432}/${PAYMENT_DB_NAME:payment-db}
     driver-class-name: org.postgresql.Driver
-    username: ${PAYMENT_DB_USER:payment-default-user}
-    password: ${PAYMENT_DB_PASSWORD:85a60bc4-4dec-4a34-b057-9d4dfb1b12cf}
+    username: ${PAYMENT_DB_USER:postgres}
+    password: ${PAYMENT_DB_PASSWORD:123}
 
 server:
   port: 8000
