@@ -28,7 +28,7 @@ services:
       - payment-network
 
   transaction-service:
-    container_name: transaction-app
+    container_name: transaction-service
     build: ./transaction
     environment:
       PAYMENT_QUEUE: payment-queue
@@ -37,10 +37,20 @@ services:
       PAYMENT_DB_USER: payment-default-user
       PAYMENT_DB_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
       PAYMENT_DB_PORT: 5432
+      AUTHORIZATION_SERVICE_HOST: authorization-service
+      AUTHORIZATION_SERVICE_PORT: 8010
     ports:
       - '8000:8000'
     depends_on:
       - payment-db
       - payment-queue
+    networks:
+      - payment-network
+
+  authorization-service:
+    container_name: authorization-service
+    build: ./authorization
+    ports:
+      - '8010:8010'
     networks:
       - payment-network
