@@ -1,0 +1,16 @@
+server:
+  port: 8010
+
+spring:
+  application:
+    name: authorization
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:postgresql://${PAYMENT_DB_HOST:localhost}:${PAYMENT_DB_PORT:5432}/${PAYMENT_DB_NAME:payment-db}
+    driver-class-name: org.postgresql.Driver
+    username: ${PAYMENT_DB_USER:postgres}
+    password: ${PAYMENT_DB_PASSWORD:123}

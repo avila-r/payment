@@ -51,9 +51,16 @@ dependencies {
 		implementation("org.springframework.boot:spring-boot-starter-actuator")
 		// Spring Web:
 		implementation("org.springframework.boot:spring-boot-starter-web")
+		// Spring Data JPA:
+		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 		// Spring Cloud Config Client:
 		// implementation("org.springframework.cloud:spring-cloud-starter-config")
 
+	/**
+	 * Datasource
+	 */
+		// PostgreSQL
+		runtimeOnly("org.postgresql:postgresql")
 
 	/**
 	 * Jackson
