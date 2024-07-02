@@ -5,7 +5,6 @@ import com.avila.authorization.model.Authorization
 import com.avila.authorization.model.Transaction
 import com.avila.authorization.service.AuthorizationService
 
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,8 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
         if (result.isOk && result.value) {
             return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(
+                .ok(
                     Authorization (
                         authorized = true,
                         error = null
@@ -30,8 +28,7 @@ import org.springframework.web.bind.annotation.RestController
         }
 
         return ResponseEntity
-            .status(result.error.status)
-            .body (
+            .ok(
                 Authorization (
                     authorized = false,
                     error = result.error.response()
