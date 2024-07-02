@@ -5,9 +5,9 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 data class Transaction (
-    val id: UUID?,
-    val payer: Long,
-    val payee: Long,
+    val id: UUID? = null,
+    val payer: Long?,
+    val payee: Long?,
     val value: BigDecimal,
-    val createdAt: LocalDateTime?
+    val createdAt: LocalDateTime? = null
 )
