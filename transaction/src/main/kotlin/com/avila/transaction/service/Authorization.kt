@@ -1,9 +1,16 @@
 package com.avila.transaction.service
 
+import com.github.michaelbull.result.Err as err
+import com.github.michaelbull.result.Ok as ok
+import com.github.michaelbull.result.Result as r
+
+import com.avila.transaction.error.APIError as Error
+import com.avila.transaction.error.APIErrorResponse
+import com.avila.transaction.error.AuthorizationError
+import com.avila.transaction.error.build
 import com.avila.transaction.model.Transaction
 
 import org.springframework.beans.factory.annotation.Value
-
 import org.springframework.web.client.RestClient
 
 private val client = RestClient.create()
@@ -14,11 +21,12 @@ private lateinit var uri: String
 @Value("\${services.authorization.endpoints.authorize-transaction}")
 private lateinit var endpoint: String
 
-data class Authorization ( val authorized: Boolean )
+private data class Authorization (
+    val authorized: Boolean,
+    val error: APIErrorResponse?
+)
 
-fun authorize(transaction: Transaction): String? { // TODO: Return Result<V, E>
-
-    // TODO: Logging
+fun authorize(transaction: Transaction): r<Boolean, Error>  {
 
     val authorization =
         client.post()
@@ -27,16 +35,12 @@ fun authorize(transaction: Transaction): String? { // TODO: Return Result<V, E>
             .retrieve()
             .toEntity(Authorization::class.java)
 
+    val body: Authorization = authorization.body ?: return err(AuthorizationError.INVALID_AUTHORIZATION_RESPONSE)
+
     if (authorization.statusCode.isError) {
-        // TODO: Error: unstable authorization service. Cancel transaction.
+        return err(body.error?.build() ?: AuthorizationError.UNSTABLE_AUTHORIZATION_SERVICE)
     }
 
-    val message = authorization.body ?: return null // TODO: Error
-
-    if (!message.authorized) {
-        // TODO: Error: unauthorized transaction
-    }
-
-    return "authorized"
+    return ok(true)
 
 }
