@@ -36,6 +36,19 @@ import java.math.BigDecimal
 
 )
 
-fun Customer.canPay(value: BigDecimal) = this.balance >= value
+data class CustomerRequest (
+    val name: String,
+    val cpf: String,
+    val email: String,
+    val password: String,
+    val type: String
+)
 
-fun Customer.isCommon() = this.type == "COMMON"
+fun CustomerRequest.build() = Customer (
+    name = this.name,
+    cpf = this.cpf,
+    email = this.email,
+    password = this.password,
+    type = this.type,
+    balance = 0.toBigDecimal()
+)
