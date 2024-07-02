@@ -13,6 +13,15 @@ interface APIError {
 }
 
 /**
+ * Extension function to retrieve the Spring's Response Entity from any implementation of [APIError].
+ * @return The response entity.
+ */
+fun APIError.response() = APIErrorResponse (
+    status = this.status.toString(),
+    message = this.message
+)
+
+/**
  * Data class representing an API error response.
  */
 data class APIErrorResponse (
@@ -21,10 +30,15 @@ data class APIErrorResponse (
 )
 
 /**
- * Extension function to retrieve the Spring's Response Entity from any implementation of [APIError].
- * @return The response entity.
+ * Extension function to convert an [APIErrorResponse] to an [APIError] implementation.
+ * @return An object implementing [APIError] with the status and message from the [APIErrorResponse].
  */
-fun APIError.response() = APIErrorResponse (
-    status = this.status.toString(),
-    message = this.message
-)
+fun APIErrorResponse.build(): APIError {
+    val status = this.status
+    val message = this.message
+
+    return object : APIError {
+        override val status: HttpStatus = HttpStatus.valueOf(status)
+        override val message: String = message
+    }
+}
