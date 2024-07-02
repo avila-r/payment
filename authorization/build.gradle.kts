@@ -8,6 +8,9 @@ plugins {
 	/**
 	 * Kotlin's plugins
 	 */
+		// JPA support for generating no-args constructor at compiled bytecode
+		kotlin("plugin.jpa") version "1.9.24"
+
 		// JVM support
 		kotlin("jvm") version "1.9.24"
 

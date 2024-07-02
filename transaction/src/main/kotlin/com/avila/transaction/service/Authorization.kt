@@ -10,16 +10,15 @@ import com.avila.transaction.error.AuthorizationError
 import com.avila.transaction.error.build
 import com.avila.transaction.model.Transaction
 
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 
-private val client = RestClient.create()
-
-@Value("\${services.authorization.uri}")
-private lateinit var uri: String
-
-@Value("\${services.authorization.endpoints.authorize-transaction}")
-private lateinit var endpoint: String
+@ConfigurationProperties("services.authorization")
+@Component object AuthorizationServiceProperties {
+    lateinit var uri: String
+    lateinit var endpoint: String
+}
 
 private data class Authorization (
     val authorized: Boolean,
@@ -28,19 +27,26 @@ private data class Authorization (
 
 fun authorize(transaction: Transaction): r<Boolean, Error>  {
 
-    val authorization =
-        client.post()
+    val uri = AuthorizationServiceProperties.uri
+    val endpoint = AuthorizationServiceProperties.endpoint
+
+    val authorization = try {
+        RestClient.create()
+            .post()
             .uri(uri + endpoint)
             .body(transaction)
             .retrieve()
             .toEntity(Authorization::class.java)
-
-    val body: Authorization = authorization.body ?: return err(AuthorizationError.INVALID_AUTHORIZATION_RESPONSE)
-
-    if (authorization.statusCode.isError) {
-        return err(body.error?.build() ?: AuthorizationError.UNSTABLE_AUTHORIZATION_SERVICE)
+    } catch (e: Exception) {
+        return err(AuthorizationError.UNSTABLE_AUTHORIZATION_SERVICE)
     }
 
-    return ok(true)
+    val body = authorization.body ?: return err(AuthorizationError.INVALID_AUTHORIZATION_RESPONSE)
+
+    if (body.error != null) {
+        return err(body.error.build())
+    }
+
+    return ok(body.authorized)
 
 }

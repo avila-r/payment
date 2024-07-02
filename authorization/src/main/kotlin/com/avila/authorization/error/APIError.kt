@@ -16,7 +16,7 @@ interface APIError {
  * Data class representing an API error response.
  */
 data class APIErrorResponse (
-    val status: String,
+    val status: HttpStatus,
     val message: String
 )
 
@@ -25,6 +25,6 @@ data class APIErrorResponse (
  * @return The response entity.
  */
 fun APIError.response() = APIErrorResponse (
-    status = this.status.toString(),
+    status = this.status,
     message = this.message
 )

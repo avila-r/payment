@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 import org.springframework.data.annotation.CreatedDate
@@ -22,15 +21,28 @@ import java.util.UUID
     @Column(nullable = false, unique = true)
     @Id var id: UUID? = null,
 
-    @ManyToOne @JoinColumn(name = "payer_id")
-    val payer: Customer,
+    @JoinColumn(name = "payer_id", nullable = false)
+    val payer: Long,
 
-    @ManyToOne @JoinColumn(name = "payee_id")
-    val payee: Customer,
+    @JoinColumn(name = "payee_id", nullable = false)
+    val payee: Long,
 
     val value: BigDecimal,
 
     @CreatedDate
+    @Column(nullable = false)
     var createdAt: LocalDateTime? = null
 
+)
+
+data class TransactionRequest (
+    val payer: Long,
+    val payee: Long,
+    val value: BigDecimal
+)
+
+fun TransactionRequest.build() = Transaction (
+    payer = this.payer,
+    payee = this.payee,
+    value = this.value
 )
