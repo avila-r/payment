@@ -36,6 +36,26 @@ import java.math.BigDecimal
 
 )
 
+fun Customer.debit(value: BigDecimal) = Customer (
+    id = this.id,
+    name = this.name,
+    cpf = this.cpf,
+    email = this.email,
+    password = this.password,
+    type = this.type,
+    balance = this.balance.subtract(value)
+)
+
+fun Customer.credit(value: BigDecimal) = Customer (
+    id = this.id,
+    name = this.name,
+    cpf = this.cpf,
+    email = this.email,
+    password = this.password,
+    type = this.type,
+    balance = this.balance.add(value)
+)
+
 data class CustomerRequest (
     val name: String,
     val cpf: String,
