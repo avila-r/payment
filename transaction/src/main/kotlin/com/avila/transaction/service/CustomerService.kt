@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional
      */
     private fun CustomerRepository.validate(request: Customer): R<Boolean, Err> {
 
-        if (request.id != null && this.findById(request.id) != null)
+        if (request.id != null && this.findCustomerById(request.id) != null)
             return err(CustomerError.CUSTOMER_ALREADY_EXISTS)
 
         if (this.findByEmail(request.email) != null)
