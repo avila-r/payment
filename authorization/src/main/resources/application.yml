@@ -10,7 +10,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://${PAYMENT_DB_HOST:localhost}:${PAYMENT_DB_PORT:5432}/${PAYMENT_DB_NAME:payment-db}
+    url: jdbc:postgresql://localhost:5432/payment-db
     driver-class-name: org.postgresql.Driver
-    username: ${PAYMENT_DB_USER:postgres}
-    password: ${PAYMENT_DB_PASSWORD:123}
+    username: postgres
+    password: 123

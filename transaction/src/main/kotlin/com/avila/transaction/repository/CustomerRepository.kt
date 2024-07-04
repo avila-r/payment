@@ -16,7 +16,7 @@ interface CustomerRepository : ListCrudRepository<Customer, Long> {
      * @param id The id of the customer to find.
      * @return The customer with the specified UUID, or null if not found.
      */
-    fun findById(id: Long?): Customer?
+    fun findCustomerById(id: Long?): Customer?
 
     /**
      * Finds a customer by its name.

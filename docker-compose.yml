@@ -31,14 +31,11 @@ services:
     container_name: transaction-service
     build: ./transaction
     environment:
-      PAYMENT_QUEUE: payment-queue
-      PAYMENT_DB_HOST: payment-db
-      PAYMENT_DB_NAME: payment-db
-      PAYMENT_DB_USER: payment-default-user
-      PAYMENT_DB_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
-      PAYMENT_DB_PORT: 5432
-      AUTHORIZATION_SERVICE_HOST: authorization-service
-      AUTHORIZATION_SERVICE_PORT: 8010
+      SPRING_DATASOURCE_URL: jdbc:postgresql://payment-db:5432/payment-db
+      SPRING_DATASOURCE_USERNAME: payment-default-user
+      SPRING_DATASOURCE_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
+      SPRING_RABBITMQ_ADDRESSES: guest:guest@payment-queue
+      SERVICES_AUTHORIZATION_URI: http://authorization-service:8010
     ports:
       - '8000:8000'
     depends_on:
@@ -54,3 +51,7 @@ services:
       - '8010:8010'
     networks:
       - payment-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://payment-db:5432/payment-db
+      SPRING_DATASOURCE_USERNAME: payment-default-user
+      SPRING_DATASOURCE_PASSWORD: 85a60bc4-4dec-4a34-b057-9d4dfb1b12cf
